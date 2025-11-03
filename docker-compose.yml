@@ -1,0 +1,53 @@
+version: "3"
+services:
+    node1:
+      image: gluster/gluster-centos
+      container_name: node1
+      privileged: true
+      networks:
+        - glusternet
+      volumes:
+        - data1:/data/brick1
+      hostname: node1
+
+    node2:
+      image: gluster/gluster-centos
+      container_name: node2
+      privileged: true
+      networks:
+        - glusternet
+      volumes:
+        - data2:/data/brick1
+      hostname: node2
+
+    node3:
+      image: gluster/gluster-centos
+      container_name: node3
+      privileged: true
+      networks:
+        - glusternet
+      volumes:
+        - data3:/data/brick1
+      hostname: node3
+    
+    client:
+      image: centos:7
+      container_name: client
+      privileged: true
+      networks:
+        - glusternet
+      depends_on:
+        - node1
+        - node2
+        - node3
+      tty: true
+      ports:
+        - "1415:80"
+
+networks:
+  glusternet:
+
+volumes:
+    data1:
+    data2:
+    data3:
